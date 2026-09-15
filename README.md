@@ -23,7 +23,7 @@ Working, and honest about its limits — which are Pantheon's, not the script's.
 team, including removing your own row**. If your role on a site is `team_member` or `developer`, the
 API answers
 
-```
+```text
 [error]  Workflow Creation Failed: Forbidden
 ```
 
@@ -109,20 +109,32 @@ without you exporting anything.
 
 ## Installation
 
-Download the one file, make it executable, and you are done:
-
-```bash
-curl -O https://raw.githubusercontent.com/jraborar/pantheon-leave-sites/main/pantheon_leave_sites.py
-chmod +x pantheon_leave_sites.py
-./pantheon_leave_sites.py --help
-```
-
-Or clone the repository:
+This repository is **private**, so cloning is the practical route — it authenticates with your own
+GitHub credentials:
 
 ```bash
 git clone https://github.com/jraborar/pantheon-leave-sites.git
 cd pantheon-leave-sites
 chmod +x pantheon_leave_sites.py
+./pantheon_leave_sites.py --help
+```
+
+No access? Ask for a collaborator invite, or just have the file sent to you — it is one
+self-contained file with no repository dependencies, so dropping it anywhere works.
+
+To pull only the script with a GitHub token (private repos need the API, not `raw.githubusercontent.com`):
+
+```bash
+curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.raw" \
+  -o pantheon_leave_sites.py \
+  https://api.github.com/repos/jraborar/pantheon-leave-sites/contents/pantheon_leave_sites.py
+chmod +x pantheon_leave_sites.py
+```
+
+If this repository is ever made public, the plain one-liner works instead:
+
+```bash
+curl -O https://raw.githubusercontent.com/jraborar/pantheon-leave-sites/main/pantheon_leave_sites.py
 ```
 
 `chmod +x` is what lets you run it as `./pantheon_leave_sites.py`. Skip it if you would rather
@@ -168,7 +180,7 @@ or paste it into `MACHINE_TOKEN` at the top of the script.
 The script lists your team memberships, checks your role on each (one API call per site, run in
 parallel), then pages through them:
 
-```
+```text
  Sites 1-10 of 25   (page 1/3)   ticked: 2
  ----------------------------------------------------------------------------
  [x]   1  admin-site                       admin        Elite
@@ -182,7 +194,7 @@ parallel), then pages through them:
 ```
 
 | Input | Effect |
-|---|---|
+| --- | --- |
 | `3` | tick/untick site 3 |
 | `1 4 7` or `1,4,7` | tick/untick several |
 | `2-6` | tick/untick a range |
@@ -201,7 +213,7 @@ type `REMOVE` before anything is sent.
 ### Options
 
 | Flag | Purpose |
-|---|---|
+| --- | --- |
 | `--dry-run` | print the `terminus` commands that would run, change nothing |
 | `--no-roles` | skip the per-site role lookup — faster start, but no `needs admin` warnings |
 | `--page-size N` | show N sites per page instead of 10 |
@@ -210,7 +222,7 @@ type `REMOVE` before anything is sent.
 
 Every removal prints as it happens, then a summary:
 
-```
+```text
  ==========================================================
  RESULTS
    listed            25
@@ -240,7 +252,7 @@ failed — so it composes into a larger script.
 The block at the top of the file is the whole configuration surface:
 
 | Setting | Default | Notes |
-|---|---|---|
+| --- | --- | --- |
 | `MACHINE_TOKEN` | `""` | Prefer the `PANTHEON_MACHINE_TOKEN` environment variable |
 | `KEEP_SITES` | commented out | Optional. Uncomment to hide sites you know you are keeping |
 | `PAGE_SIZE` | `10` | Sites per page |
